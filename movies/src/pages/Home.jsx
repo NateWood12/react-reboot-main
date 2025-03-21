@@ -1,47 +1,49 @@
 import MovieCard from '../components/MovieCard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../css/Home.css'
+import { getPopularMovies, searchMovies } from '../services/api';
 
 function Home(){
     const [searchQuery, setSearchQuery] = useState("");
-    const movies = [
-        {
-            title: "Inception",
-            release_date: "2010-07-16",
-            url: "https://placehold.co/400x600",
-          },
-          {
-            title: "Interstellar",
-            release_date: "2014-11-07",
-            url: "https://placehold.co/400x600",
-          },
-          {
-            title: "The Dark Knight",
-            release_date: "2008-07-18",
-            url: "https://placehold.co/400x600",
-          },
-          {
-            title: "Fight Club",
-            release_date: "1999-10-15",
-            url: "https://placehold.co/400x600",
-          },
-          {
-            title: "The Matrix",
-            release_date: "1999-03-31",
-            url: "https://placehold.co/400x600",
-          },
-          {
-            title: "Pulp Fiction",
-            release_date: "1994-10-14",
-            url: "https://placehold.co/400x600",
-          }
-    ];
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const handleSearch = (e) =>{
+
+    useEffect(()=>{
+      const loadPopularMovies = async()=> {
+          try{
+            const PopularMovies = await getPopularMovies();
+            setMovies(PopularMovies)
+          }catch(err){
+            console.error(err);
+            setError("Failed to load movies")
+          }finally{
+            setLoading(false)
+          }
+      }
+      loadPopularMovies();
+    },[])
+
+    const handleSearch = async (e) =>{
       e.preventDefault();
-      alert(searchQuery);
-      setSearchQuery("");
+      if(!searchQuery.trim()) return;//prevent empty search //same as if(searchQuery.trim() =="")
+      if(loading) return; //if we're already in a loading state. Don't do it
+      setLoading(true)
+      try{
+        const searchResults = await searchMovies(searchQuery)
+        setMovies(searchResults);
+        setError(null)
+      }catch(err){
+        console.error(err);
+        setError("Failed to search")
+      }finally{
+        setLoading(false)
+      }
+      // setSearchQuery("");
     }
+
+
 
     return (
         <div className="home">
@@ -55,11 +57,16 @@ function Home(){
               Search
             </button>
           </form>
+          {error && <div className='error-message'>{error}</div>}
+          {loading? (<div className='loading'>Loading...</div>):(
+            
             <div className="movies-grid">
-                {movies.map((movie, index) => (
-                    <MovieCard key={index} movie={movie} />
-                ))}
-            </div>
+            {movies.map((movie, index) => (
+                <MovieCard key={index} movie={movie} />
+            ))}
+        </div>
+          )}
+            
         </div>
     )
 }

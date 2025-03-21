@@ -1,0 +1,29 @@
+.movie-detail {
+    max-width: 900px;
+    /* margin: 20px auto; */
+    font-family: Arial, sans-serif;
+}
+
+.movie-info {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.movie-details-poster {
+    width: 500px;
+    border-radius: 8px;
+}
+
+.movie-description {
+    max-width: 600px;
+}
+
+.movie-description p {
+    margin: 10px 0;
+}
+
+.movie-description a {
+    color: #0066cc;
+    text-decoration: none;
+}
