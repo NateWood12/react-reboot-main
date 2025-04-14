@@ -41,8 +41,8 @@ function Movie({ movieId }) {
                     <p><strong>Runtime:</strong> {movie.runtime} minutes</p>
                     <p><strong>Rating:</strong> {movie.vote_average} / 10 ({movie.vote_count} votes)</p>
                     <p><strong>Production Companies:</strong> {movie.production_companies.map(company => company.name).join(', ')}</p>
-                    <p><strong>Homepage:</strong> <a href={movie.homepage} target="_blank" rel="noopener noreferrer">{movie.homepage}</a></p>
-                    <p><strong>IMDB ID:</strong> <a href={`https://www.imdb.com/title/${movie.imdb_id}`} target="_blank" rel="noopener noreferrer">{movie.imdb_id}</a></p>
+                    <p><strong>Homepage:</strong> <a href={movie.homepage}>{movie.homepage}</a></p>
+                    <p><strong>IMDB ID:</strong> <a href={`https://www.imdb.com/title/${movie.imdb_id}`}>{movie.imdb_id}</a></p>
                 </div>
             </div>
         </div>
